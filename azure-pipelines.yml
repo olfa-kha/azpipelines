@@ -1,0 +1,27 @@
+trigger:
+- main # Change to your branch name
+
+pool:
+  vmImage: 'ubuntu-latest' # Uses a Linux agent pool
+
+stages:
+# Stage 1
+- stage: Stage1
+  displayName: "Stage 1 - Greeting"
+  jobs:
+  - job: Job1
+    displayName: "Job 1 - Echo Hello"
+    steps:
+    - script: echo "Hello from Stage 1!"
+      displayName: "Run echo script in Stage 1"
+
+# Stage 2
+- stage: Stage2
+  displayName: "Stage 2 - Farewell"
+  dependsOn: Stage1
+  jobs:
+  - job: Job2
+    displayName: "Job 2 - Echo Goodbye"
+    steps:
+    - script: echo "Goodbye from Stage 2!"
+      displayName: "Run echo script in Stage 2"
