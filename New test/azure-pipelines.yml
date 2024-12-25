@@ -1,0 +1,49 @@
+trigger:
+- main # Change to your branch name
+
+pool:
+  vmImage: 'windows-latest' 
+
+variables:
+ Date: '$(Build.SourceVersionAuthoringTimestamp)'
+ Application URL: 'https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?redirect_uri=https%3A%2F%2Fportal.azure.com%2Fsignin%2Findex%2F&response_type=code%20id_token&scope=https%3A%2F%2Fmanagement.core.windows.net%2F%2Fuser_impersonation%20openid%20email%20profile&state=OpenIdConnect.AuthenticationProperties%3Dup6ousiKNfgewZjrsIg-3NEPML7mElmkRlB6j1TkVj8Q10Xb5WCxMmLfaA8duEDqkjferoHvS2zDfUIbxiDD6LPpVUdNDa2zjxJpAh9_6F9O8W-XlgcCn-h9300224CgGmnOBdXliQ85mOqTeiI31x7kDHvZQQHc_9WnNQAxd4EUfzhejy6EOIa6NoKOf6r-Ek4C3OBnP1U5cZIEqdzpyhlRduXk5iZhKJqBNRRIE7OyB7cSW6o5C_XWbpJpDKoTPK6X0svhJ7G_7r0XcY558VNShG5dIWipX0j3q5XZSBwZUOMok_e0zvJuHK3kLD6OBLZmu1HXK789ROEERQsza7Gn4fi1aBx2d9uA1Sw6gqjRi_tpLJs5b48YCRUMScOAzkQy4EPk9D5m12q_9vooVy-aCL4SBc1kPu9AGbRSq4UOU3vD7VSXqBK0q1Luig-g__ZThvzMpnLAAl9g9EEiMzfsr8Sd98d2A7iaJsIPX14sEdWS4xmulUgZ6zblakFA4cWKGq9oOWAK2AQ-P5FNJ7qyJr8TiXXnk2By0MzHYDo&response_mode=form_post&nonce=638707292901635745.YWYwYWE4YTctNGVhMS00OTcxLWE1MDktNGU2MDljYzE5Y2MzMGI4NzVkZmEtMTBlYS00NmYyLWExNjktNTdjY2QyODEyODg2&client_id=c44b4083-3bb0-49c1-b47d-974e53cbdf3c&site_id=501430&client-request-id=9e895677-16ed-4513-82b0-57fce657d26b&x-client-SKU=ID_NET472&x-client-ver=7.5.0.0'
+
+stages:
+# Stage 1
+- stage: Stage1
+  displayName: "Stage 1 - Greeting"
+  jobs:
+  - job: Job1
+    displayName: "Job 1 - Echo Hello"
+    steps:
+    - script: echo "Hello from Stage 1!"
+      displayName: "Run echo script in Stage 1"
+
+# Stage 2
+- stage: Stage2
+  displayName: "Stage 2 - Farewell"
+  dependsOn: Stage1
+  jobs:
+  - job: Job2
+    displayName: "Job 2 - Echo Goodbye"
+    steps:
+    - script: echo "Goodbye from Stage 2!"
+      displayName: "Run echo script in Stage 2"
+    - task: sendemailtask@1
+      displayName: 'Send Deployment Notification Email'
+      inputs:
+        to: 'Wiem.Belhaj@mannai.com.qa'
+        subject: 'Deployment Notification - Production'
+        body: |
+          <html>
+            <body>
+              <h3>Deployment Notification</h3>
+              <p>The deployment for <b>$(Release.EnvironmentName)</b> was completed successfully.</p>
+              <p>Environment: Production </p>
+              <p>Date: $(Date)</p>
+              <p>Application URL: <a href="$(ApplicationUrl)">$(ApplicationUrl)</a></p
+              smtpServer: 'smtp.office365.com'
+        smtpPort: '587'
+        enableSsl: true
+        username: 'olfakhalij@outlook.com'
+        password: '$(Casanostra8)'
