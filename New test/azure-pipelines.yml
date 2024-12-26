@@ -34,10 +34,11 @@ stages:
         script: |
           #!/bin/bash
 
-          # Define email addresses, tfIds, and work item IDs
-          emailAddresses=("Wiem.Belhaj@mannai.com.qa") # Replace with actual email address
-          tfIds=()                                    # Leave empty if not using TFIDs
-          workIDs=("workitemID")                      # Replace with the actual Work Item ID if applicable
+          # Define your PAT (replace with a secure variable in production)
+          PAT="BW5W9pjBdl7leyUE6Qjaq9mcMw7Z6BGj9Qgfp6upvZj6SUcsSdeCJQQJ99ALACAAAAAhoCslAAASAZDOihpJ"
+
+          # Define email addresses
+          emailAddresses=("olfa.khalij@mannai.com.qa")
 
           # Prepare the email body
           requestBody=$(cat <<EOF
@@ -56,8 +57,7 @@ stages:
               "replyTo": {
                 "tfIds": []
               }
-            },
-            "wiql": "SELECT [System.Id] FROM WorkItems WHERE [System.Id] = ${workIDs[0]}"
+            }
           }
           EOF
           )
@@ -67,7 +67,16 @@ stages:
           echo "$requestBody"
 
           # Send email via REST API using curl
-          curl -X POST "$SYSTEM_TEAMFOUNDATIONSERVERURI$SYSTEM_TEAMPROJECT/_apis/wit/sendmail?api-version=7.0" \
-               -H "Authorization: Basic $(echo -n ":$SYSTEM_ACCESSTOKEN" | base64)" \
-               -H "Content-Type: application/json; charset=utf-8" \
-               -d "$requestBody"
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST "https://dev.azure.com/OlfaKhalijOrgLab/Pipelinerelease/_apis/wit/sendmail?api-version=7.0" \
+            -H "Authorization: Basic $(echo -n ":$PAT" | base64)" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "$requestBody")
+
+          # Check the HTTP response code
+          if [ "$response" -eq 200 ]; then
+            echo "Email sent successfully!"
+          else
+            echo "Failed to send email. HTTP response code: $response"
+            exit 1
+          fi
