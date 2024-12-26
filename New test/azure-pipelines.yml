@@ -1,49 +1,84 @@
-#!/bin/bash
+trigger:
+- main # Trigger on changes to the main branch
 
-# Define your PAT (replace with a secure variable in production)
-PAT="BW5W9pjBdl7leyUE6Qjaq9mcMw7Z6BGj9Qgfp6upvZj6SUcsSdeCJQQJ99ALACAAAAAhoCslAAASAZDOihpJ"
+pool:
+  vmImage: 'windows-latest' 
 
-# Define email addresses
-emailAddresses=("olfa.khalij@mannai.com.qa")
+stages:
+# Stage 1: Greeting
+- stage: Stage1
+  displayName: "Stage 1 - Greeting"
+  jobs:
+  - job: Job1
+    displayName: "Job 1 - Echo Hello"
+    steps:
+    - script: echo "Hello from Stage 1!"
+      displayName: "Run echo script in Stage 1"
 
-# Prepare the email body
-requestBody=$(cat <<EOF
-{
-  "message": {
-    "to": {
-      "emailAddresses": ["${emailAddresses[0]}"]
-    },
-    "subject": "This is a test subject",
-    "body": "This is a test body"
-  }
-}
-EOF
-)
+# Stage 2: Farewell
+- stage: Stage2
+  displayName: "Stage 2 - Farewell"
+  dependsOn: Stage1
+  jobs:
+  - job: Job2
+    displayName: "Job 2 - Echo Goodbye"
+    steps:
+    - script: echo "Goodbye from Stage 2!"
+      displayName: "Run echo script in Stage 2"
 
-# Display the request body for debugging purposes
-echo "Request Body:"
-echo "$requestBody"
+    # Send Email via REST API
+    - task: Bash@3
+      name: SendEmailTask
+      displayName: "Send Email via REST API"
+      inputs:
+        targetType: 'inline'
+        script: |
+          #!/bin/bash
 
-# Send email via REST API using curl
-response=$(curl -s -w "\nHTTP_CODE:%{http_code}" \
-  -X POST "https://dev.azure.com/OlfaKhalijOrgLab/Pipelinerelease/_apis/wit/sendmail?api-version=7.0" \
-  -H "Authorization: Basic $(echo -n ":$PAT" | base64)" \
-  -H "Content-Type: application/json" \
-  -d "$requestBody")
+          # Define your PAT (replace with a secure variable in production)
+          PAT="BW5W9pjBdl7leyUE6Qjaq9mcMw7Z6BGj9Qgfp6upvZj6SUcsSdeCJQQJ99ALACAAAAAhoCslAAASAZDOihpJ"
 
-# Parse HTTP response code
-http_code=$(echo "$response" | grep "HTTP_CODE" | sed 's/HTTP_CODE://')
-response_body=$(echo "$response" | sed '/HTTP_CODE:/d')
+          # Define email addresses
+          emailAddresses=("olfa.khalij@mannai.com.qa")
 
-# Output debugging information
-echo "Response Body: $response_body"
-echo "HTTP Code: $http_code"
+          # Prepare the email body
+          requestBody=$(cat <<EOF
+          {
+            "message": {
+              "to": {
+                "emailAddresses": ["${emailAddresses[0]}"]
+              },
+              "subject": "This is a test subject",
+              "body": "This is a test body"
+            }
+          }
+          EOF
+          )
 
-# Check the HTTP response code
-if [ "$http_code" -eq 200 ]; then
-  echo "Email sent successfully!"
-else
-  echo "Failed to send email. HTTP response code: $http_code"
-  echo "Response Body: $response_body"
-  exit 1
-fi
+          # Display the request body for debugging purposes
+          echo "Request Body:"
+          echo "$requestBody"
+
+          # Send email via REST API using curl
+          response=$(curl -s -w "\nHTTP_CODE:%{http_code}" \
+            -X POST "https://dev.azure.com/OlfaKhalijOrgLab/Pipelinerelease/_apis/wit/sendmail?api-version=7.0" \
+            -H "Authorization: Basic $(echo -n ":$PAT" | base64)" \
+            -H "Content-Type: application/json" \
+            -d "$requestBody")
+
+          # Parse HTTP response code
+          http_code=$(echo "$response" | grep "HTTP_CODE" | sed 's/HTTP_CODE://')
+          response_body=$(echo "$response" | sed '/HTTP_CODE:/d')
+
+          # Output debugging information
+          echo "Response Body: $response_body"
+          echo "HTTP Code: $http_code"
+
+          # Check the HTTP response code
+          if [ "$http_code" -eq 200 ]; then
+            echo "Email sent successfully!"
+          else
+            echo "Failed to send email. HTTP response code: $http_code"
+            echo "Response Body: $response_body"
+            exit 1
+          fi
