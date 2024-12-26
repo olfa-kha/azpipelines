@@ -45,5 +45,5 @@ stages:
               smtpServer: 'smtp.office365.com'
         smtpPort: '587'
         enableSsl: true
-        username: 'olfakhalij@outlook.com'
-        password: '$(Casanostra8)'
+        username: 'olfa.khalij@mannai.com.qa'
+        password: '$(@thingswillbeok1234567)'
