@@ -45,18 +45,10 @@ stages:
           {
             "message": {
               "to": {
-                "tfIds": [],
-                "emailAddresses": ["${emailAddresses[0]}"],
-                "unresolvedEntityIds": []
+                "emailAddresses": ["${emailAddresses[0]}"]
               },
               "subject": "This is a test subject",
-              "body": "This is a test body",
-              "cc": {
-                "tfIds": []
-              },
-              "replyTo": {
-                "tfIds": []
-              }
+              "body": "This is a test body"
             }
           }
           EOF
@@ -67,16 +59,25 @@ stages:
           echo "$requestBody"
 
           # Send email via REST API using curl
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
+          response=$(curl -s -w "\nHTTP_CODE:%{http_code}" \
             -X POST "https://dev.azure.com/OlfaKhalijOrgLab/Pipelinerelease/_apis/wit/sendmail?api-version=7.0" \
             -H "Authorization: Basic $(echo -n ":$PAT" | base64)" \
             -H "Content-Type: application/json; charset=utf-8" \
             -d "$requestBody")
 
+          # Parse HTTP response code
+          http_code=$(echo "$response" | grep "HTTP_CODE" | sed 's/HTTP_CODE://')
+          response_body=$(echo "$response" | sed '/HTTP_CODE:/d')
+
+          # Output debugging information
+          echo "Response Body: $response_body"
+          echo "HTTP Code: $http_code"
+
           # Check the HTTP response code
-          if [ "$response" -eq 200 ]; then
+          if [ "$http_code" -eq 200 ]; then
             echo "Email sent successfully!"
           else
-            echo "Failed to send email. HTTP response code: $response"
+            echo "Failed to send email. HTTP response code: $http_code"
+            echo "Response Body: $response_body"
             exit 1
           fi
