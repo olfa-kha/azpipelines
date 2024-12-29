@@ -8,7 +8,8 @@ variables:
  ACSConnectionString: 'endpoint=https://testcommadad112.unitedstates.communication.azure.com/;accesskey=D1YcpO2m6qu7eGXPXfA61rcsCqXbpuegCAw6MsIR5XYyHyDlZn75JQQJ99ALACULyCphoCslAAAAAZCSOsRw"ds901632QyODEyODg2&client_id=c44b4083-3bb0-49c1-b47d-974e53cbdf3c&site_id=501430&client-request-id=9e895677-16ed-4513-82b0-57fce657d26b&x-client-SKU=ID_NET472&x-client-ver=7.5.0.0'
  RecipientEmails: 'olfa.khalij@mannai.com.qa'
  Subject: 'Deployment Succeeded'
- body: 'deployment succeded'
+ body: 'deployment succeeded'
+ SenderEmail: 'DoNotReply@1aa1fbc6-3830-46f9-a434-ab9660f8d4c8.azurecomm.net'
 
 stages:
 # Stage 1
