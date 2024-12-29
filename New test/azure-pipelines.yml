@@ -42,8 +42,8 @@ stages:
       displayName: 'Send Deployment Notification Email'
       inputs:
        from: 'olfakhalij@mannai.com.qa'
-        to: 'Wiem.Belhaj@mannai.com.qa'
-        subject: 'Deployment Notification - Production'
+       to: 'Wiem.Belhaj@mannai.com.qa'
+       subject: 'Deployment Notification - Production'
         body: |
           <html>
             <body>
