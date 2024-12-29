@@ -29,7 +29,7 @@ stages:
     steps:
     - script: echo "Goodbye from Stage 2!"
       displayName: "Run echo script in Stage 2"
-    - task: sendemailtask@1
+    - task: sendemail@1
       displayName: 'Send Deployment Notification Email'
       inputs:
         to: 'Wiem.Belhaj@mannai.com.qa'
