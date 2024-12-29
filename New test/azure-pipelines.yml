@@ -44,7 +44,7 @@ stages:
        from: 'olfakhalij@mannai.com.qa'
        to: 'Wiem.Belhaj@mannai.com.qa'
        subject: 'Deployment Notification - Production'
-        body: |
+       body: |
           <html>
             <body>
               <h3>Deployment Notification</h3>
