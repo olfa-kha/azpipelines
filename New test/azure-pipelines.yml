@@ -38,7 +38,7 @@ stages:
   - job: Job3
     displayName: "Send Deployment Notification Email"
     steps:
-    - task: SendCustomEmail@2
+    - task: SendCustomEmail
       displayName: 'Send Deployment Notification Email'
       inputs:
         to: 'Wiem.Belhaj@mannai.com.qa'
