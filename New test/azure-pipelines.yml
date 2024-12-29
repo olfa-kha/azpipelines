@@ -45,10 +45,5 @@ stages:
         powershell -Command "Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -ArgumentList '/I AzureCLI.msi /quiet /norestart' -NoNewWindow -Wait"
         echo Azure CLI installed successfully!
         echo Sending email via Azure Communication Services...
-        az communication email send `
-          --sender "$(SenderEmail)" `
-          --subject "$(Subject)" `
-          --to $(RecipientEmails) `
-          --text "$(Body)" `
-          --connection-string "$(ACSConnectionString)"
+        az communication email send --sender "$(SenderEmail)" --subject "$(Subject)" --to $(RecipientEmails) --text "$(Body)" --connection-string "$(ACSConnectionString)"
       displayName: "Send Email Using Azure CLI"
