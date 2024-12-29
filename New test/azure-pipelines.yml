@@ -40,7 +40,7 @@ stages:
     - task: SendEmail@1
       displayName: 'Send Deployment Notification Email'
       inputs:
-       from: 'okhalij@mannai.com.qa'
+       from: 'azuredevops@microsoft.com'
        to: 'Wiem.Belhaj@mannai.com.qa'
        subject: 'Deployment Notification - Production'
        body: |
@@ -55,5 +55,3 @@ stages:
        smtpServer: 'smtp.office365.com'
        smtpPort: '587'
        enableSsl: true
-       username: 'okhalij@mannai.com.qa'
-       password: '$(@thingswillbeok1234567)'
