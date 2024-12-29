@@ -48,7 +48,7 @@ stages:
           <html>
             <body>
               <h3>Deployment Notification</h3>
-              <p>The deployment for <b>$(Release.EnvironmentName)</b> was completed successfully.</p>
+              <p>The deployment for <b>Production</b> was completed successfully.</p>
               <p>Environment: Production</p>
               <p>Date: $(Date)</p>
               <p>Application URL: <a href="$(ApplicationUrl)">$(ApplicationUrl)</a></p>
