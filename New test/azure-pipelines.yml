@@ -29,21 +29,23 @@ stages:
     steps:
     - script: echo "Goodbye from Stage 2!"
       displayName: "Run echo script in Stage 2"
-    - task: sendemail@1
-      displayName: 'Send Deployment Notification Email'
-      inputs:
-        to: 'Wiem.Belhaj@mannai.com.qa'
-        subject: 'Deployment Notification - Production'
-        body: |
-          <html>
-            <body>
-              <h3>Deployment Notification</h3>
-              <p>The deployment for <b>$(Release.EnvironmentName)</b> was completed successfully.</p>
-              <p>Environment: Production </p>
-              <p>Date: $(Date)</p>
-              <p>Application URL: <a href="$(ApplicationUrl)">$(ApplicationUrl)</a></p
-              smtpServer: 'smtp.office365.com'
-        smtpPort: '587'
-        enableSsl: true
-        username: 'olfakhalij@mannai.com.qa'
-        password: '$(@thingswillbeok1234567)'
+    - task: SendCustomEmail@1
+  displayName: 'Send Deployment Notification Email'
+  inputs:
+    to: 'Wiem.Belhaj@mannai.com.qa'
+    subject: 'Deployment Notification - Production'
+    body: |
+      <html>
+        <body>
+          <h3>Deployment Notification</h3>
+          <p>The deployment for <b>$(Release.EnvironmentName)</b> was completed successfully.</p>
+          <p>Environment: Production </p>
+          <p>Date: $(Date)</p>
+          <p>Application URL: <a href="$(ApplicationUrl)">$(ApplicationUrl)</a></p>
+        </body>
+      </html>
+    smtpServer: 'smtp.office365.com'
+    smtpPort: '587'
+    enableSsl: true
+    username: 'olfakhalij@mannai.com.qa'
+    password: '$(EmailPassword)'
