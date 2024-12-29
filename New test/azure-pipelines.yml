@@ -54,8 +54,8 @@ stages:
               <p>Application URL: <a href="$(ApplicationUrl)">$(ApplicationUrl)</a></p>
             </body>
           </html>
-        smtpServer: 'smtp.office365.com'
-        smtpPort: '587'
-        enableSsl: true
-        username: 'olfakhalij@mannai.com.qa'
-        password: '$(@thingswillbeok1234567)'
+       smtpServer: 'smtp.office365.com'
+       smtpPort: '587'
+       enableSsl: true
+       username: 'olfakhalij@mannai.com.qa'
+       password: '$(@thingswillbeok1234567)'
