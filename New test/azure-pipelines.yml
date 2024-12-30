@@ -46,8 +46,6 @@ stages:
     az extension add --name communication
   displayName: "Install Communication Extension"
 
-      displayName: "Install Communication Extension"
-
   - job: SendEmailViaACS
     displayName: "Send Email via ACS"
     dependsOn: InstallCommunicationExtension
