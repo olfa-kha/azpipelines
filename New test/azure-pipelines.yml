@@ -62,4 +62,4 @@ stages:
           --to "%RecipientEmails%" `
           --text "%Body%" `
           --connection-string "%ACSConnectionString%"
-      displayName: "Send Email Using Azure
+      displayName: "Send Email Using Azure"
