@@ -52,7 +52,7 @@ stages:
         echo Communication Extension installed successfully!
 
   - job3: "SendEmailviaACS" 
-  displayName: "Send Email via ACS"
+    displayName: "Send Email via ACS"
   - script: |        
         echo Sending email via Azure Communication Services...
         az communication email send --sender "$(SenderEmail)" --subject "$(Subject)" --to $(RecipientEmails) --text "$(Body)" --connection-string "$(ACSConnectionString)"
