@@ -54,5 +54,13 @@ stages:
     steps:
     - script: |
         echo Sending email via Azure Communication Services...
-        az communication email send --sender "$(SenderEmail)" --subject "$(Subject)" --to "$(RecipientEmails)" --text "Deployment succeeded for project: $(System.TeamProject).\nBuild ID: $(Build.BuildId).\nEnvironment: $(EnvironmentName)." --connection-string "$(ACSConnectionString)" --connection-string "$(ACSConnectionString)"
+        az communication email send `
+          --sender "$(SenderEmail)" `
+          --subject "$(Subject)" `
+          --to "$(RecipientEmails)" `
+          --text |
+            Deployment succeeded for project: $(System.TeamProject).
+            Build ID: $(Build.BuildId).
+            Environment: $(EnvironmentName).
+          --connection-string "$(ACSConnectionString)"
       displayName: "Send Email Using Azure CLI"
