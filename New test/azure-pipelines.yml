@@ -7,9 +7,8 @@ pool:
 variables:
   ACSConnectionString: 'endpoint=https://testcommadad112.unitedstates.communication.azure.com/;accesskey=D1YcpO2m6qu7eGXPXfA61rcsCqXbpuegCAw6MsIR5XYyHyDlZn75JQQJ99ALACULyCphoCslAAAAAZCSOsRw'
   RecipientEmails: 'olfa.khalij@mannai.com.qa'
-  Subject: 'Deployment Succeeded'
-  Body: 'Deployment succeeded'
-  SenderEmail: 'DoNotReply@1aa1fbc6-3830-46f9-a434-ab9660f8d4c8.azurecomm.net'
+  Body: 'Deployment was successful'
+  
 
 stages:
 # Stage 1
@@ -23,9 +22,8 @@ stages:
       displayName: "Run echo script in Stage 1"
 
 # Stage 2
-- stage: SendEmail
+- stage: Stage2
   displayName: "Send Email Notification"
-  dependsOn: Stage1
   condition: succeeded()
   jobs:
   - job: InstallAzureCLI
@@ -39,6 +37,7 @@ stages:
 
   - job: InstallCommunicationExtension
     displayName: "Install Communication Service Extension"
+    dependsOn: InstallAzureCLI
     steps:
     - script: |
         echo Configuring Azure CLI for preview extensions...
@@ -50,12 +49,13 @@ stages:
 
   - job: SendEmailViaACS
     displayName: "Send Email via ACS"
+    dependsOn: InstallCommunicationExtension
     steps:
     - script: |
         echo Sending email via Azure Communication Services...
         az communication email send `
-          --sender "$(SenderEmail)" `
-          --subject "$(Subject)" `
+          --sender "DoNotReply@1aa1fbc6-3830-46f9-a434-ab9660f8d4c8.azurecomm.net" `
+          --subject "Deployment Succeeded" `
           --to "$(RecipientEmails)" `
           --text "$(Body)" `
           --connection-string "$(ACSConnectionString)"
