@@ -40,26 +40,26 @@ stages:
     displayName: "Install Communication Service Extension"
     dependsOn: InstallAzureCLI
     steps:
-  - script: |
-    echo Configuring Azure CLI for preview extensions...
-    az config set extension.dynamic_install_allow_preview=true
-    az extension add --name communication
-  displayName: "Install Communication Extension"
+    - script: |
+        echo Configuring Azure CLI for preview extensions...
+        az config set extension.dynamic_install_allow_preview=true
+        az extension add --name communication
+      displayName: "Install Communication Extension"
 
   - job: SendEmailViaACS
     displayName: "Send Email via ACS"
     dependsOn: InstallCommunicationExtension
     steps:
     - script: |
-    echo Debugging Variables...
-    echo Sender: "%SenderEmail%"
-    echo Subject: "%Subject%"
-    echo Recipients: "%RecipientEmails%"
-    echo Connection String: "%ACSConnectionString%"
-    az communication email send `
-      --sender "%SenderEmail%" `
-      --subject "%Subject%" `
-      --to "%RecipientEmails%" `
-      --text "%Body%" `
-      --connection-string "%ACSConnectionString%"
-      displayName: "Send Email Using Azure CLI"
+        echo Debugging Variables...
+        echo Sender: "%SenderEmail%"
+        echo Subject: "%Subject%"
+        echo Recipients: "%RecipientEmails%"
+        echo Connection String: "%ACSConnectionString%"
+        az communication email send `
+          --sender "%SenderEmail%" `
+          --subject "%Subject%" `
+          --to "%RecipientEmails%" `
+          --text "%Body%" `
+          --connection-string "%ACSConnectionString%"
+      displayName: "Send Email Using Azure
