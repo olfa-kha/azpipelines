@@ -41,7 +41,6 @@ stages:
         echo Installing Azure CLI...
         powershell -Command "Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -ArgumentList '/I AzureCLI.msi /quiet /norestart' -NoNewWindow -Wait"
         echo Azure CLI installed successfully!
-    displayName: "Install Azure CLI"
 
   - job2: Install communication service extension
     displayName: "Install communication service extension"
@@ -52,7 +51,7 @@ stages:
         az extension add --name communication
         echo Communication Extension installed successfully!
 
-  - job3: "Send Email via ACS" 
+  - job3: "SendEmailviaACS" 
   displayName: "Send Email via ACS"
   - script: |        
         echo Sending email via Azure Communication Services...
