@@ -2,14 +2,14 @@ trigger:
 - main # Trigger on changes to the main branch
 
 pool:
-  vmImage: 'windows-latest' 
+  vmImage: 'windows-latest'
 
 variables:
- ACSConnectionString: 'endpoint=https://testcommadad112.unitedstates.communication.azure.com/;accesskey=D1YcpO2m6qu7eGXPXfA61rcsCqXbpuegCAw6MsIR5XYyHyDlZn75JQQJ99ALACULyCphoCslAAAAAZCSOsRw"ds901632QyODEyODg2&client_id=c44b4083-3bb0-49c1-b47d-974e53cbdf3c&site_id=501430&client-request-id=9e895677-16ed-4513-82b0-57fce657d26b&x-client-SKU=ID_NET472&x-client-ver=7.5.0.0'
- RecipientEmails: 'olfa.khalij@mannai.com.qa'
- Subject: 'Deployment Succeeded'
- body: 'deployment succeeded'
- SenderEmail: 'DoNotReply@1aa1fbc6-3830-46f9-a434-ab9660f8d4c8.azurecomm.net'
+  ACSConnectionString: 'endpoint=https://testcommadad112.unitedstates.communication.azure.com/;accesskey=D1YcpO2m6qu7eGXPXfA61rcsCqXbpuegCAw6MsIR5XYyHyDlZn75JQQJ99ALACULyCphoCslAAAAAZCSOsRw'
+  RecipientEmails: 'olfa.khalij@mannai.com.qa'
+  Subject: 'Deployment Succeeded'
+  Body: 'Deployment succeeded'
+  SenderEmail: 'DoNotReply@1aa1fbc6-3830-46f9-a434-ab9660f8d4c8.azurecomm.net'
 
 stages:
 # Stage 1
@@ -22,33 +22,41 @@ stages:
     - script: echo "Hello from Stage 1!"
       displayName: "Run echo script in Stage 1"
 
-# Stage 2 
+# Stage 2
 - stage: SendEmail
   displayName: "Send Email Notification"
-  depends On: Stage1
-  Condition: succeeded
+  dependsOn: Stage1
+  condition: succeeded()
   jobs:
-  - job1: Install Azure CLI
+  - job: InstallAzureCLI
     displayName: "Install Azure CLI"
     steps:
-  - script: |
+    - script: |
         echo Installing Azure CLI...
         powershell -Command "Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -ArgumentList '/I AzureCLI.msi /quiet /norestart' -NoNewWindow -Wait"
         echo Azure CLI installed successfully!
-    displayName: "Install Azure CLI"
+      displayName: "Install Azure CLI"
 
-  - job2: Install communication service extension
-    displayName: "Install communication service extension"
-  - script: |
+  - job: InstallCommunicationExtension
+    displayName: "Install Communication Service Extension"
+    steps:
+    - script: |
         echo Configuring Azure CLI for preview extensions...
         az config set extension.dynamic_install_allow_preview=true
         echo Installing Communication Extension...
         az extension add --name communication
         echo Communication Extension installed successfully!
+      displayName: "Install Communication Extension"
 
-  - job3: "Send Email via ACS" 
-  displayName: "Send Email Using Azure CLI"
-  - script: |        
+  - job: SendEmailViaACS
+    displayName: "Send Email via ACS"
+    steps:
+    - script: |
         echo Sending email via Azure Communication Services...
-        az communication email send --sender "$(SenderEmail)" --subject "$(Subject)" --to $(RecipientEmails) --text "$(Body)" --connection-string "$(ACSConnectionString)"
-
+        az communication email send `
+          --sender "$(SenderEmail)" `
+          --subject "$(Subject)" `
+          --to "$(RecipientEmails)" `
+          --text "$(Body)" `
+          --connection-string "$(ACSConnectionString)"
+      displayName: "Send Email Using Azure CLI"
