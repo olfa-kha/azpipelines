@@ -54,5 +54,5 @@ stages:
     steps:
     - script: |
         echo Sending email via Azure Communication Services...
-         az communication email send --sender "$(SenderEmail)" --subject "Build succeeded for project: $(System.TeamProject). Environment: $(EnvironmentName)" --to "$(RecipientEmails)" --html "$(EmailBody)" --connection-string "ACSConnectionString" 
+         az communication email send --sender "$(SenderEmail)" --subject "Build succeeded for project: $(System.TeamProject). Environment: $(EnvironmentName)" --to "$(RecipientEmails)" --html "$(EmailBody)" --connection-string "endpoint=https://testcommadad112.unitedstates.communication.azure.com/;accesskey=D1YcpO2m6qu7eGXPXfA61rcsCqXbpuegCAw6MsIR5XYyHyDlZn75JQQJ99ALACULyCphoCslAAAAAZCSOsRw" 
       displayName: "Send Email Using Azure CLI"
