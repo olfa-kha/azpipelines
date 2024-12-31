@@ -23,7 +23,6 @@ stages:
   variables:
     ACSConnectionString: 'endpoint=https://testcommadad112.unitedstates.communication.azure.com/;accesskey=D1YcpO2m6qu7eGXPXfA61rcsCqXbpuegCAw6MsIR5XYyHyDlZn75JQQJ99ALACULyCphoCslAAAAAZCSOsRw'
     RecipientEmails: 'olfa.khalij@mannai.com.qa'
-    Subject: 'Deployment Succeeded'
     SenderEmail: 'DoNotReply@1aa1fbc6-3830-46f9-a434-ab9660f8d4c8.azurecomm.net'
     EnvironmentName: 'Production'
   jobs:
@@ -54,5 +53,5 @@ stages:
     steps:
     - script: |
         echo Sending email via Azure Communication Services...
-         az communication email send --sender "$(SenderEmail)" --subject "$(Subject)" --to "$(RecipientEmails)" --text "Deployment succeeded for project: $(System.TeamProject). Build ID: $(Build.BuildId). Environment: $(EnvironmentName)." --connection-string "$(ACSConnectionString)"
+         az communication email send --sender "$(SenderEmail)" --subject "Build succeeded for project: $(System.TeamProject). Environment: $(EnvironmentName)" --to "$(RecipientEmails)" --text "here is the link: $(System.TeamProject). Build ID: $(Build.BuildId). Environment: $(EnvironmentName)." --connection-string "$(ACSConnectionString)"
       displayName: "Send Email Using Azure CLI"
