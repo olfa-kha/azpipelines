@@ -25,6 +25,7 @@ stages:
     RecipientEmails: 'olfa.khalij@mannai.com.qa'
     SenderEmail: 'DoNotReply@1aa1fbc6-3830-46f9-a434-ab9660f8d4c8.azurecomm.net'
     EnvironmentName: 'Production'
+    EmailBody: '<html><body><h2>Deployment succeeded</h2><br/><h4>Link: https://www.w3schools.com/html/tryit.asp?filename=tryhtml_editor</h4><p>This mail was sent using .NET SDK!!</p></body></html>'
   jobs:
   - job: InstallAzureCLI
     displayName: "Install Azure CLI"
@@ -53,5 +54,5 @@ stages:
     steps:
     - script: |
         echo Sending email via Azure Communication Services...
-         az communication email send --sender "$(SenderEmail)" --subject "Build succeeded for project: $(System.TeamProject). Environment: $(EnvironmentName)" --to "$(RecipientEmails)" --text "here is the link: $(System.TeamProject). Build ID: $(Build.BuildId). Environment: $(EnvironmentName)." --connection-string "$(ACSConnectionString)"
+         az communication email send --sender "$(SenderEmail)" --subject "Build succeeded for project: $(System.TeamProject). Environment: $(EnvironmentName)" --to "$(RecipientEmails)" --html "$(EmailBody)"
       displayName: "Send Email Using Azure CLI"
